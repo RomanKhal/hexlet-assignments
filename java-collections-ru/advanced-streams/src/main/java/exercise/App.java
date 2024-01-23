@@ -1,5 +1,7 @@
 package exercise;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
@@ -7,18 +9,25 @@ import java.util.Arrays;
 // BEGIN
 class App {
     public static String getForwardedVariables(String file) {
-        return Arrays.stream(file.split("\n"))
-                .filter(line -> App.selectParam(line, "environment"))
-                .map(args -> args.substring(12, args.length() - 1))
-                .map(arg -> arg.split(","))
+        String copy = file.replace("\n", " ");
+        var list = getParams(copy);
+        return list.stream()
+                .map(elem -> elem.split(","))
                 .flatMap(Arrays::stream)
-                .filter(param -> App.selectParam(param, "X_FORWARDED_"))
-                .map(arg -> arg.substring(12))
+                .filter(e -> e.contains("X_FORWARDED_"))
+                .map(e -> e.substring(12))
                 .collect(Collectors.joining(","));
     }
 
-    private static boolean selectParam(String elem, String param) {
-        return elem.startsWith(param);
+    private static List<String> getParams(String elem) {
+        var res = new ArrayList<String>();
+        while (elem.contains("environment")) {
+            int index = elem.indexOf("environment") + 13;
+            int end = elem.indexOf("\"", index);
+            res.add(elem.substring(index, end));
+            elem = elem.substring(end);
+        }
+        return res;
     }
 }
 //END
