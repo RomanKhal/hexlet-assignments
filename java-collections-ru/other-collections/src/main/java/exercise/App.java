@@ -20,15 +20,15 @@ class App {
         var res = new LinkedHashMap<String, String>();
         for (var key : keySetOfBoth) {
             if (map1.containsKey(key) && map2.containsKey(key)) {
-                    if (map1.get(key).equals(map2.get(key))) {
-                        res.put(key, UNCHANGED);
-                    } else {
-                        res.put(key, CHANGED);
-                    }
+                if (map1.get(key).equals(map2.get(key))) {
+                    res.put(key, UNCHANGED);
+                } else {
+                    res.put(key, CHANGED);
                 }
-            if(map1.containsKey(key)) {
+            }
+            if (map1.containsKey(key)) {
                 res.putIfAbsent(key, DELETED);
-            }else {
+            } else {
                 res.putIfAbsent(key, ADDED);
             }
         }
