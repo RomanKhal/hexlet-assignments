@@ -12,6 +12,8 @@ public class App {
         System.out.println(reversedSequence.charAt(1));
         System.out.println(reversedSequence);
         System.out.println(reversedSequence.subSequence(1,3));
+
+
     }
     public static List<String> buildApartmentsList(List<Home> homes, int n) {
         return  homes.stream().sorted(Home::compareTo)

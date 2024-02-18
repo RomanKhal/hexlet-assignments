@@ -20,13 +20,6 @@ public class ReversedSequence implements CharSequence{
         this.data = new String(data);
     }
 
-//    private void reverse() {
-//        for (int i = 0; i < data.length / 2; i++) {
-//            byte temp =data[i];
-//            data[i] = data[length() - i - 1];
-//            data[length() - i - 1] = temp;
-//        }
-//    }
 
     @Override
     public boolean isEmpty() {
