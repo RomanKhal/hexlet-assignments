@@ -4,11 +4,16 @@
 
 @template.layout.page(
 content = @`
+<h1>Пользователи</h1>
+<div>
+@for(var user : page.getUsers())
 
-    @for(var user : page.getUsers())
-        <p><a href="/users/{${user.getId()}}">${user.getFirstName()} ${user.getLastName()}</a></p>
-    @endfor
-`,
+<p>
+<a href="/users/${user.getId()}">${user.getFirstName()} ${user.getLastName()}</a>
+</p>
+
+@endfor
+</div>`,
 footer = @`
     <div>Its cruppy footer<div>
 `

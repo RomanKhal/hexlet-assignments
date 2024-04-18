@@ -23,6 +23,8 @@
     <a href="/">Main </a><a href="/users"> Users</a>
 </div>
 ${content}
-${footer}
+@if(!footer.isEmptyContent())
+    ${footer}
+@endif
 </body>
 </html>
