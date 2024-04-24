@@ -14,7 +14,7 @@ import lombok.Getter;
 @NoArgsConstructor
 @Getter
 public class BuildArticlePage {
-    private String title;
+    private Article article;
     private Map<String, List<ValidationError<Object>>> errors;
 }
 // END

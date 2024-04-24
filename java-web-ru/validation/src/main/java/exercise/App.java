@@ -5,7 +5,6 @@ import exercise.dto.articles.BuildArticlePage;
 import exercise.model.Article;
 import exercise.repository.ArticleRepository;
 import io.javalin.Javalin;
-import io.javalin.http.HttpStatus;
 import io.javalin.rendering.template.JavalinJte;
 import io.javalin.validation.ValidationException;
 
@@ -34,20 +33,18 @@ public final class App {
 
         // BEGIN
         app.post("/articles", context -> {
-            var title = context.formParamAsClass("title", String.class);
-            var content = context.formParamAsClass("content", String.class);
             try {
-                var checkedTitle = title.check(v -> v.length() > 2, "Длина названия короче 2х символов")
-                        .check(v -> !ArticleRepository.existsByTitle(v), "Не оригинальное название")
+                var checkedTitle = context.formParamAsClass("title", String.class)
+                        .check(v -> v.length() > 2, "Название не должно быть короче двух символов")
+                        .check(v -> !ArticleRepository.existsByTitle(v), "Статья с таким названием уже существует")
                         .get();
-                var checkedContent = content.check(v -> v.length() > 10, "Длина статьи меньше 10 символов").get();
-                Article article = new Article(checkedTitle, checkedContent);
-                ArticleRepository.save(article);
+                var checkedContent = context.formParamAsClass("content", String.class)
+                        .check(v -> v.length() > 10, "Статья должна быть не короче 10 символов").get();
+                ArticleRepository.save(new Article(checkedTitle, checkedContent));
                 context.redirect("/articles");
             } catch (ValidationException e) {
-                var page = new BuildArticlePage(title.get(),e.getErrors());
-                context.status(422);
-                context.render("articles/build.jte", model("page", page));
+                var page = new BuildArticlePage(new Article(context.formParam("title"), context.formParam("content")), e.getErrors());
+                context.render("articles/build.jte", model("page", page)).status(422);
             }
         });
         app.get("/articles/build", context -> {
