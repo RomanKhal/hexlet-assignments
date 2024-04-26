@@ -5,14 +5,9 @@ import exercise.dto.posts.PostsPage;
 import exercise.model.Post;
 import exercise.repository.PostRepository;
 import io.javalin.http.Context;
-import io.javalin.http.NotFoundResponse;
-import io.javalin.validation.ValidationError;
-import io.javalin.validation.ValidationException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Optional;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
 
@@ -20,13 +15,13 @@ public class PostsController {
 
     // BEGIN
     public static void post(Context ctx) {
-            try {
-                Long id = ctx.pathParamAsClass("{id}", Long.class).get();
-                PostPage page = new PostPage(PostRepository.find(id).get());
-                ctx.render("posts/show.jte", model("page", page));
-            } catch (NoSuchElementException e) {
-                ctx.result("Page not found").status(404);
-            }
+        try {
+            Long id = ctx.pathParamAsClass("{id}", Long.class).get();
+            PostPage page = new PostPage(PostRepository.find(id).get());
+            ctx.render("posts/show.jte", model("page", page));
+        } catch (NoSuchElementException e) {
+            ctx.result("Page not found").status(404);
+        }
 
     }
 

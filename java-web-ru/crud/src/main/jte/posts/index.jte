@@ -4,9 +4,10 @@
 
 @template.layout.page(
 content = @`
-    <div class="mx-auto p-4 py-md-5">
+    <div class="mx-5 p-4 py-md-6 ">
         <main>
             <a href="${NamedRoutes.postsPath()}">Все посты</a>
+            <div class="justify-content-center">
             <table class="table table-light justify-content-center">
                 <thead>
                 <tr>
@@ -21,6 +22,7 @@ content = @`
                 @endfor
                 </tbody>
             </table>
+            </div>
             <nav aria-label="Page navigation example" >
                 <ul class="pagination justify-content-center">
                     <li class="page-item">
