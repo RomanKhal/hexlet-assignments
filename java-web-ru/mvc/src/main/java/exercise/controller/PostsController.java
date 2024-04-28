@@ -8,7 +8,6 @@ import exercise.model.Post;
 import exercise.repository.PostRepository;
 import exercise.util.NamedRoutes;
 import io.javalin.http.Context;
-import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
 import io.javalin.validation.ValidationException;
 
@@ -61,12 +60,12 @@ public class PostsController {
     // BEGIN
     public static void edit(Context ctx) {
         var id = ctx.pathParamAsClass("id", Long.class).get();
-            var post = PostRepository.find(id)
-                    .orElseThrow(() -> new NotFoundResponse("Post not found"));
-            var editPost = new EditPostPage();
-            editPost.setName(post.getName());
-            editPost.setBody(post.getBody());
-            ctx.render("posts/edit.jte", model("page", editPost));//, model ("page", page)
+        var post = PostRepository.find(id)
+                .orElseThrow(() -> new NotFoundResponse("Post not found"));
+        var editPost = new EditPostPage();
+        editPost.setName(post.getName());
+        editPost.setBody(post.getBody());
+        ctx.render("posts/edit.jte", model("page", editPost));//, model ("page", page)
     }
 
     public static void update(Context ctx) {
