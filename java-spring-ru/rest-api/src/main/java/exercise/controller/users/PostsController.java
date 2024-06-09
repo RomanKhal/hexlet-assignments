@@ -18,13 +18,8 @@ public class PostsController {
     private List<Post> list = new ArrayList<>();
 
     @GetMapping("/users/{id}/posts")
-    ResponseEntity<List<Post>> index(@PathVariable int id) {
-        List<Post> result = list.stream().filter(post -> post.getUserId() == id).toList();
-        HttpStatus status = HttpStatus.NO_CONTENT;
-        if (!result.isEmpty()) {
-            status = HttpStatus.OK;
-        }
-        return ResponseEntity.status(status).body(result);
+    List<Post> index(@PathVariable int id) {
+        return list.stream().filter(post -> post.getUserId() == id).toList();
     }
 
     @PostMapping("/users/{id}/posts")
