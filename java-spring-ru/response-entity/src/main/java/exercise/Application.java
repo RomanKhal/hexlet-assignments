@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,10 +23,10 @@ public class Application {
 
     // BEGIN
     @GetMapping("/posts")
-    ResponseEntity<List<Post>> index() {
+    ResponseEntity<List<Post>> index(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer limit) {
         return ResponseEntity.ok()
                 .header("X-Total-Count", String.valueOf(posts.size()))
-                .body(posts);
+                .body(posts.stream().skip(page - 1).limit(limit).toList());
     }
 
     @GetMapping("/posts/{id}")
@@ -35,21 +36,24 @@ public class Application {
     }
 
     @PostMapping("/posts")
-    ResponseEntity<Post> create(@RequestBody Post data) {
-        posts.add(data);
-        return ResponseEntity.status(HttpStatus.CREATED).body(data);
+    ResponseEntity<Post> create(@RequestBody Post post) {
+        posts.add(post);
+        URI location = URI.create("/posts");
+        return ResponseEntity.created(location).body(post);
     }
+
     @PutMapping("/posts/{id}")
-    ResponseEntity update(@PathVariable String id,@RequestBody Post data) {
+    ResponseEntity<Post> update(@PathVariable String id, @RequestBody Post data) {
         Optional<Post> maybePost = posts.stream().filter(p -> p.getId().equals(id)).findFirst();
+        HttpStatus status = HttpStatus.NO_CONTENT;
         if (maybePost.isPresent()) {
             var post = maybePost.get();
             post.setId(data.getId());
             post.setBody(data.getBody());
             post.setTitle(data.getTitle());
-            return ResponseEntity.ok(data);
+            status = HttpStatus.OK;
         }
-        return ResponseEntity.status(204).build();
+        return ResponseEntity.status(status).body(data);
     }
     // END
 
